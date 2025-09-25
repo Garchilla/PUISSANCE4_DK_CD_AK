@@ -12,8 +12,8 @@ func renderTemplate(w http.ResponseWriter, filename string, data map[string]stri
 
 func Home(w http.ResponseWriter, r *http.Request) {
 	data := map[string]string{
-		"Title":   "Acceuil",
-		"Message": "Bienvenue sur la page d'acceuil",
+		"Title":   "PUISSANCE 4",
+		"Message": "Bienvenue au jeu de Puissance 4 en ligne!",
 	}
 	renderTemplate(w, "index.html", data)
 }
