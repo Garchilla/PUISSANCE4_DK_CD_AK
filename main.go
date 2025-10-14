@@ -8,19 +8,19 @@ import (
 )
 
 const (
-	rows    = 6
-	columns = 7
+	ligne   = 6
+	colonne = 7
 )
 
 var (
-	board  = make([][]string, rows)
+	board  = make([][]string, ligne)
 	player = "R"
 	mu     sync.Mutex
 )
 
 func init() {
 	for i := range board {
-		board[i] = make([]string, columns)
+		board[i] = make([]string, colonne)
 	}
 }
 
