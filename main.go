@@ -39,11 +39,16 @@ func main() {
 		if r.Method == http.MethodPost && player == "R" {
 			fmt.Println("Faire apparaitre en rouge")
 			w.Write([]byte("Action effectuée côté serveur ! "))
+			player = "J"
+		} else if r.Method == http.MethodPost && player == "J" {
+			fmt.Println("Faire apparaitre en jaune")
+			w.Write([]byte("Action effectuée côté serveur"))
+			player = "R"
 		} else {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 		}
 	})
 
-	fmt.Println("Serveur démarré sur http://localhost:8081/")
-	http.ListenAndServe(":8081", nil)
+	fmt.Println("Serveur démarré sur http://localhost:8080/")
+	http.ListenAndServe(":8080", nil)
 }
