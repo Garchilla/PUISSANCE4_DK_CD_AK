@@ -7,13 +7,6 @@ import (
 	"sync"
 )
 
-func main() {
-	r := router.New()
-
-	fmt.Println("Serveur démarré sur http://localhost:8080")
-	http.ListenAndServe(":8080", r)
-}
-
 const NBLignes = 6
 const NBColonnes = 7
 
@@ -23,6 +16,7 @@ var (
 	board   [NBLignes][NBColonnes]string
 	colonne int
 	ligne   int
+	counter int
 )
 
 func deposerJeton(board *[NBLignes][NBColonnes]string, colonne int, joueur string) (int, bool) {
@@ -37,10 +31,6 @@ func deposerJeton(board *[NBLignes][NBColonnes]string, colonne int, joueur strin
 		}
 	}
 	return -1, false
-func init() {
-	for i := range board {
-		board[i] = make([]string, columns)
-	}
 }
 
 func main() {
@@ -49,25 +39,37 @@ func main() {
 
 	http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("img"))))
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		tmpl := template.Must(template.ParseFiles("about.html"))
-		tmpl.Execute(w, nil)
-	})
+	http.HandleFunc("/", handleAbout)
 
-	http.HandleFunc("/action", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodPost && player == "R" {
-			fmt.Println("Faire apparaitre en rouge")
-			w.Write([]byte("Action effectuée côté serveur ! "))
-			player = "J"
-		} else if r.Method == http.MethodPost && player == "J" {
-			fmt.Println("Faire apparaitre en jaune")
-			w.Write([]byte("Action effectuée côté serveur"))
-			player = "R"
-		} else {
-			w.WriteHeader(http.StatusMethodNotAllowed)
-		}
-	})
+	http.HandleFunc("/action", handleAction)
 
 	fmt.Println("Serveur démarré sur http://localhost:8080/")
 	http.ListenAndServe(":8080", nil)
+}
+
+func handleAbout(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.ParseFiles("about.html"))
+	tmpl.Execute(w, map[string]interface{}{
+		"Count": counter,
+	})
+}
+
+func handleAction(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost && joueur == "R" {
+		mu.Lock()
+		counter++
+		joueur = "J"
+		mu.Unlock()
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		fmt.Println("Jeton Rouge ajouté")
+	} else if r.Method == http.MethodPost && joueur == "J" {
+		mu.Lock()
+		counter++
+		joueur = "R"
+		mu.Unlock()
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		fmt.Println("Jeton Jaune ajouté")
+	} else {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
 }
