@@ -7,17 +7,36 @@ import (
 	"sync"
 )
 
-const (
-	ligne   = 6
-	colonne = 7
-)
+func main() {
+	r := router.New()
+
+	fmt.Println("Serveur démarré sur http://localhost:8080")
+	http.ListenAndServe(":8080", r)
+}
+
+const NBLignes = 6
+const NBColonnes = 7
 
 var (
-	board  = make([][]string, ligne)
-	player = "R"
-	mu     sync.Mutex
+	joueur  = "R"
+	mu      sync.Mutex
+	board   [NBLignes][NBColonnes]string
+	colonne int
+	ligne   int
 )
 
+func deposerJeton(board *[NBLignes][NBColonnes]string, colonne int, joueur string) (int, bool) {
+	if colonne < 0 || colonne >= NBColonnes {
+		return -1, false
+	}
+
+	for ligne := NBLignes - 1; ligne >= 0; ligne-- {
+		if board[ligne][colonne] == "." {
+			board[ligne][colonne] = joueur
+			return ligne, true
+		}
+	}
+	return -1, false
 func init() {
 	for i := range board {
 		board[i] = make([]string, colonne)
