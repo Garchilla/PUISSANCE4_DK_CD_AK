@@ -11,7 +11,7 @@ body {
   margin-bottom: 10px;
 }
 
-.arrow_box {
+button {
   width: 60px;
   height: 60px;
   background-color: #fff;
@@ -24,7 +24,7 @@ body {
   overflow: hidden;
 }
 
-.arrow_box::after{
+button::after{
     content: "";
     position: absolute;
     inset: 0;
@@ -32,11 +32,11 @@ body {
     transition: background 0.3s ease;
 }
 
-.arrow_box:hover::after{
+button:hover::after{
     background: rgba(0,0,0,0.2);
 }
 
-.arrow_box img {
+button img {
   width: 40px;
   height: 40px;
   object-fit: contain;
