@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"net/http"
-	"power4/router"
 	"sync"
 )
 
@@ -37,4 +37,37 @@ func deposerJeton(board *[NBLignes][NBColonnes]string, colonne int, joueur strin
 		}
 	}
 	return -1, false
+func init() {
+	for i := range board {
+		board[i] = make([]string, columns)
+	}
+}
+
+func main() {
+	fs := http.FileServer(http.Dir("static"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
+
+	http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("img"))))
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		tmpl := template.Must(template.ParseFiles("about.html"))
+		tmpl.Execute(w, nil)
+	})
+
+	http.HandleFunc("/action", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodPost && player == "R" {
+			fmt.Println("Faire apparaitre en rouge")
+			w.Write([]byte("Action effectuée côté serveur ! "))
+			player = "J"
+		} else if r.Method == http.MethodPost && player == "J" {
+			fmt.Println("Faire apparaitre en jaune")
+			w.Write([]byte("Action effectuée côté serveur"))
+			player = "R"
+		} else {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+		}
+	})
+
+	fmt.Println("Serveur démarré sur http://localhost:8080/")
+	http.ListenAndServe(":8080", nil)
 }
