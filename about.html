@@ -1,45 +1,32 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Puissance 4</title>
-    <link href="../static/style.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Puissance 4</title>
+  <link href="../static/style.css" rel="stylesheet">
 </head>
 <body>
-<h1>Puissance 4</h1>
-<form action="/action" method="POST">
-  <div class="arrow_row">
-    <button type="submit"><img src="../img/fleche_bas.png" alt="fleche vers  le bas"></button>
-    <button type="submit"><img src="../img/fleche_bas.png" alt="fleche vers  le bas"></button>
-    <button type="submit"><img src="../img/fleche_bas.png" alt="fleche vers  le bas"></button>
-    <button type="submit"><img src="../img/fleche_bas.png" alt="fleche vers  le bas"></button>
-    <button type="submit"><img src="../img/fleche_bas.png" alt="fleche vers  le bas"></button>
-    <button type="submit"><img src="../img/fleche_bas.png" alt="fleche vers  le bas"></button>
-    <button type="submit"><img src="../img/fleche_bas.png" alt="fleche vers  le bas"></button>
-  </div>
-</form>
-<table>
-<tbody>
-    <tr>
-        <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-    </tr>
-      <tr>
-        <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-      </tr>
-      <tr>
-        <td></td><td></td><td ></td><td></td><td></td><td></td><td></td>
-      </tr>
-      <tr>
-        <td></td><td ></td><td ></td><td></td><td></td><td></td><td></td>
-      </tr>
-      <tr>
-        <td></td><td ></td><td ></td><td></td><td></td><td></td><td></td>
-      </tr>
-      <tr>
-        <td></td><td ></td><td ></td><td></td><td></td><td></td><td></td>
-      </tr>
-    </tbody>
-  </table>
+  <h1>Puissance 4</h1>
+  <form action="/action" method="POST">
+    <table>
+      <thead>
+        <tr>
+          {{range $i, $_ := index .Board 0}}
+            <td><button type="submit" name="column" value="{{$i}}"><img src="../img/fleche_bas.png" alt="fleche vers  le bas"></button></td>
+          {{end}}
+        </tr>
+      </thead>
+      <tbody>
+        {{range .Board}}
+          <tr>
+            {{range .}}
+              <td class="{{.}}"></td>
+            {{end}}
+          </tr>
+        {{end}}
+     </tbody>
+   </table>
+  </form>
 </body>
 </html>
