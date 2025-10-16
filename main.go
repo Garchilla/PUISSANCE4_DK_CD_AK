@@ -31,6 +31,10 @@ func deposerJeton(board *[NBLignes][NBColonnes]string, colonne int, joueur strin
 		}
 	}
 	return -1, false
+func init() {
+	for i := range board {
+		board[i] = make([]string, colonne)
+	}
 }
 
 func main() {
