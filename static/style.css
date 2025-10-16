@@ -35,8 +35,6 @@ button img {
   object-fit: contain;
 }
 
-
-
 table {
   margin: auto;
   border-collapse: collapse;
@@ -56,6 +54,14 @@ td.Rouge {
 }
 
 td.Jaune {
-  background-color: yellow;
+  background-color: rgb(190, 190, 1);
   border-radius: 50%;
+}
+
+.res {
+  width: 100px;
+  cursor: pointer;
+  border: #fff;
+  background-color: #f0f0f0;
+  font-size: 25px;
 }
