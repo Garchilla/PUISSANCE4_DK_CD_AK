@@ -15,7 +15,7 @@ var (
 	mu        sync.Mutex
 	gameState = GameState{
 		Board:         makeBoard(),
-		CurrentPlayer: "red",
+		CurrentPlayer: "Rouge",
 	}
 )
 
@@ -46,10 +46,10 @@ func deposerJeton(board [][]string, colonne int, joueur string) (int, bool) {
 }
 
 func switchPlayer(current string) string {
-	if current == "red" {
-		return "yellow"
+	if current == "Rouge" {
+		return "Jaune"
 	}
-	return "red"
+	return "Rouge"
 }
 
 func main() {
@@ -60,8 +60,8 @@ func main() {
 	http.HandleFunc("/", handleAbout)
 	http.HandleFunc("/action", handleAction)
 
-	fmt.Println("Serveur démarré sur http://localhost:8080/")
-	http.ListenAndServe(":8080", nil)
+	fmt.Println("Serveur démarré sur http://localhost:8090/")
+	http.ListenAndServe(":8090", nil)
 }
 
 func handleAbout(w http.ResponseWriter, r *http.Request) {
