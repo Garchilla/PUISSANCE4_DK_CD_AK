@@ -48,17 +48,17 @@ td {
   border-radius: 50%;
 }
 
-td.Rouge {
+.Rouge {
   background-color: red;
   border-radius: 50%;
 }
 
-td.Jaune {
+.Jaune {
   background-color: rgb(190, 190, 1);
   border-radius: 50%;
 }
 
-.res {
+.Res {
   width: 100px;
   cursor: pointer;
   border: #fff;

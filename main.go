@@ -60,8 +60,8 @@ func main() {
 	http.HandleFunc("/", handleAbout)
 	http.HandleFunc("/action", handleAction)
 
-	fmt.Println("Serveur démarré sur http://localhost:8090/")
-	http.ListenAndServe(":8090", nil)
+	fmt.Println("Serveur démarré sur http://localhost:8081/")
+	http.ListenAndServe(":8081", nil)
 }
 
 func handleAbout(w http.ResponseWriter, r *http.Request) {
@@ -75,18 +75,22 @@ func handleAction(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	colStr := r.FormValue("column")
-	col, err := strconv.Atoi(colStr)
-	if err != nil || col < 0 || col >= NBColonnes {
-		http.Error(w, "Colonne invalide", http.StatusBadRequest)
-		return
-	}
-
 	mu.Lock()
 	defer mu.Unlock()
 
-	if _, ok := deposerJeton(gameState.Board, col, gameState.CurrentPlayer); ok {
-		gameState.CurrentPlayer = switchPlayer(gameState.CurrentPlayer)
+	if r.FormValue("Reset") == "true" {
+		gameState.Board = makeBoard()
+		gameState.CurrentPlayer = "Rouge"
+	} else {
+		colStr := r.FormValue("column")
+		col, err := strconv.Atoi(colStr)
+		if err != nil || col < 0 || col >= NBColonnes {
+			http.Error(w, "Colonne invalide", http.StatusBadRequest)
+			return
+		}
+		if _, ok := deposerJeton(gameState.Board, col, gameState.CurrentPlayer); ok {
+			gameState.CurrentPlayer = switchPlayer(gameState.CurrentPlayer)
+		}
 	}
 
 	tmpl, err := template.ParseFiles("about.html")
