@@ -1,4 +1,10 @@
-
+h1 {
+  display: flex;
+  width: auto;
+  height: 100px;
+  border-radius: 50%;
+  justify-content: center;
+}
 
 body {
   background-image: url("../img/diner.jpg");
@@ -69,7 +75,7 @@ td {
   border-radius: 50%;
 }
 
-.Res {
+.res {
   width: 100px;
   cursor: pointer;
   border: #fff;
