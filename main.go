@@ -17,6 +17,7 @@ var (
 		Board:         Creation(),
 		CurrentPlayer: "Pizza",
 		GameOver:      false,
+		Tour:          1,
 	}
 )
 
@@ -25,6 +26,7 @@ type GameState struct {
 	CurrentPlayer string
 	GameOver      bool
 	Winner        string
+	Tour          int
 }
 
 func Creation() [][]string {
@@ -44,8 +46,10 @@ func deposerJeton(board [][]string, colonne int, joueur string) (int, bool) {
 		if board[ligne][colonne] == "" {
 			if gameState.CurrentPlayer == "Pizza" {
 				board[ligne][colonne] = joueur
+				gameState.Tour++
 			} else if gameState.CurrentPlayer == "Burger" {
 				board[ligne][colonne] = joueur
+				gameState.Tour++
 			}
 			return ligne, true
 		}
@@ -110,15 +114,20 @@ func handleAction(w http.ResponseWriter, r *http.Request) {
 	mu.Lock()
 	defer mu.Unlock()
 
-	if gameState.GameOver {
-		http.Redirect(w, r, "/Victoire.html", http.StatusSeeOther)
-		return
-	}
-
 	if r.FormValue("Reset") == "true" {
 		gameState.Board = Creation()
 		gameState.CurrentPlayer = "Pizza"
-	} else {
+		gameState.Tour = 1
+		gameState.GameOver = false
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	if gameState.GameOver {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	if r.Method == http.MethodPost {
 		colStr := r.FormValue("column")
 		col, err := strconv.Atoi(colStr)
 		if err != nil || col < 0 || col >= NBColonnes {
@@ -126,6 +135,19 @@ func handleAction(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if ligne, ok := deposerJeton(gameState.Board, col, gameState.CurrentPlayer); ok {
+			if gameState.Tour == NBLignes*NBColonnes+1 && !checkWin(gameState.Board, ligne, col, gameState.CurrentPlayer) {
+				fmt.Println("Match nul!")
+				gameState.CurrentPlayer = "MATCH NUL"
+				gameState.GameOver = true
+				gameState.Winner = gameState.CurrentPlayer
+
+				tmpl, err := template.ParseFiles("victory.html")
+				if err != nil {
+					http.Error(w, "Template introuvable", http.StatusInternalServerError)
+				}
+				tmpl.Execute(w, gameState)
+				return
+			}
 			if checkWin(gameState.Board, ligne, col, gameState.CurrentPlayer) {
 				fmt.Printf("Le joueur %s a gagné!\n", gameState.CurrentPlayer)
 				gameState.CurrentPlayer = "Gagnant: " + gameState.CurrentPlayer
