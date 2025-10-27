@@ -1,6 +1,10 @@
+
+
 body {
-  background-color: #f0f0f0;
-  font-family: sans-serif;
+  background-image: url("../img/diner.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 50%;
   text-align: center;
 }
 
@@ -38,6 +42,7 @@ button img {
 table {
   margin: auto;
   border-collapse: collapse;
+  background-color: white;
 }
 
 td {
@@ -48,13 +53,19 @@ td {
   border-radius: 50%;
 }
 
-.Rouge {
-  background-color: red;
+.Pizza {
+  background-image: url("../img/pizza-1.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   border-radius: 50%;
 }
 
-.Jaune {
-  background-color: rgb(190, 190, 1);
+.Burger {
+  background-image: url("../img/burger.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   border-radius: 50%;
 }
 

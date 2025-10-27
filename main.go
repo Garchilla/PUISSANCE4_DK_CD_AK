@@ -15,7 +15,7 @@ var (
 	mu        sync.Mutex
 	gameState = GameState{
 		Board:         Creation(),
-		CurrentPlayer: "Rouge",
+		CurrentPlayer: "Pizza",
 		GameOver:      false,
 	}
 )
@@ -36,12 +36,17 @@ func Creation() [][]string {
 }
 
 func deposerJeton(board [][]string, colonne int, joueur string) (int, bool) {
+	joueur = gameState.CurrentPlayer
 	if colonne < 0 || colonne >= NBColonnes {
 		return -1, false
 	}
 	for ligne := NBLignes - 1; ligne >= 0; ligne-- {
 		if board[ligne][colonne] == "" {
-			board[ligne][colonne] = joueur
+			if gameState.CurrentPlayer == "Pizza" {
+				board[ligne][colonne] = joueur
+			} else if gameState.CurrentPlayer == "Burger" {
+				board[ligne][colonne] = joueur
+			}
 			return ligne, true
 		}
 	}
@@ -49,16 +54,17 @@ func deposerJeton(board [][]string, colonne int, joueur string) (int, bool) {
 }
 
 func switchPlayer(current string) string {
-	if current == "Rouge" {
-		return "Jaune"
+	if current == "Pizza" {
+		return "Burger"
 	}
-	return "Rouge"
+	return "Pizza"
 }
 
 func checkWin(board [][]string, ligne, colonne int, joueur string) bool {
 	directions := [][2]int{
 		{0, 1}, {1, 0}, {1, 1}, {1, -1},
 	}
+	joueur = gameState.CurrentPlayer
 	for _, dir := range directions {
 		count := 1
 		for _, step := range []int{1, -1} {
@@ -85,8 +91,8 @@ func main() {
 	http.HandleFunc("/", handleAbout)
 	http.HandleFunc("/action", handleAction)
 
-	fmt.Println("Serveur démarré sur http://localhost:8081/")
-	http.ListenAndServe(":8081", nil)
+	fmt.Println("Serveur démarré sur http://localhost:8082/")
+	http.ListenAndServe(":8082", nil)
 
 }
 
@@ -105,13 +111,13 @@ func handleAction(w http.ResponseWriter, r *http.Request) {
 	defer mu.Unlock()
 
 	if gameState.GameOver {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+		http.Redirect(w, r, "/Victoire.html", http.StatusSeeOther)
 		return
 	}
 
 	if r.FormValue("Reset") == "true" {
 		gameState.Board = Creation()
-		gameState.CurrentPlayer = "Rouge"
+		gameState.CurrentPlayer = "Pizza"
 	} else {
 		colStr := r.FormValue("column")
 		col, err := strconv.Atoi(colStr)
@@ -153,7 +159,7 @@ func handleAction(w http.ResponseWriter, r *http.Request) {
 
 func handleRematch(w http.ResponseWriter, r *http.Request) {
 	gameState.Board = Creation()
-	gameState.CurrentPlayer = "Rouge"
+	gameState.CurrentPlayer = "Pizza"
 	gameState.GameOver = false
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
