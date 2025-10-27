@@ -8,7 +8,7 @@
 </head>
 <body>
   <h1>Puissance 4</h1>
-  <h2>{{.CurrentPlayer}} à vous de jouer !</h2>
+  <h2>{{.CurrentPlayer}}</h2>
   <form action="/action" method="POST">
     <table>
       <thead>
@@ -29,7 +29,6 @@
      </tbody>
    </table>
   </form>
-
   <form action="/action" method="POST">
     <input type="hidden" name="Reset" value="true">
     <button class="res" type="submit" name="Reset">Reset</button>

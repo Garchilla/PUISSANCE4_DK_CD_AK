@@ -14,17 +14,20 @@ const NBColonnes = 7
 var (
 	mu        sync.Mutex
 	gameState = GameState{
-		Board:         makeBoard(),
+		Board:         Creation(),
 		CurrentPlayer: "Rouge",
+		GameOver:      false,
 	}
 )
 
 type GameState struct {
 	Board         [][]string
 	CurrentPlayer string
+	GameOver      bool
+	Winner        string
 }
 
-func makeBoard() [][]string {
+func Creation() [][]string {
 	board := make([][]string, NBLignes)
 	for i := range board {
 		board[i] = make([]string, NBColonnes)
@@ -52,6 +55,28 @@ func switchPlayer(current string) string {
 	return "Rouge"
 }
 
+func checkWin(board [][]string, ligne, colonne int, joueur string) bool {
+	directions := [][2]int{
+		{0, 1}, {1, 0}, {1, 1}, {1, -1},
+	}
+	for _, dir := range directions {
+		count := 1
+		for _, step := range []int{1, -1} {
+			dx, dy := dir[0]*step, dir[1]*step
+			x, y := ligne+dx, colonne+dy
+			for x >= 0 && x < NBLignes && y >= 0 && y < NBColonnes && board[x][y] == joueur {
+				count++
+				if count >= 4 {
+					return true
+				}
+				x += dx
+				y += dy
+			}
+		}
+	}
+	return false
+}
+
 func main() {
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
@@ -62,6 +87,7 @@ func main() {
 
 	fmt.Println("Serveur démarré sur http://localhost:8081/")
 	http.ListenAndServe(":8081", nil)
+
 }
 
 func handleAbout(w http.ResponseWriter, r *http.Request) {
@@ -78,8 +104,13 @@ func handleAction(w http.ResponseWriter, r *http.Request) {
 	mu.Lock()
 	defer mu.Unlock()
 
+	if gameState.GameOver {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
 	if r.FormValue("Reset") == "true" {
-		gameState.Board = makeBoard()
+		gameState.Board = Creation()
 		gameState.CurrentPlayer = "Rouge"
 	} else {
 		colStr := r.FormValue("column")
@@ -88,8 +119,22 @@ func handleAction(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Colonne invalide", http.StatusBadRequest)
 			return
 		}
-		if _, ok := deposerJeton(gameState.Board, col, gameState.CurrentPlayer); ok {
-			gameState.CurrentPlayer = switchPlayer(gameState.CurrentPlayer)
+		if ligne, ok := deposerJeton(gameState.Board, col, gameState.CurrentPlayer); ok {
+			if checkWin(gameState.Board, ligne, col, gameState.CurrentPlayer) {
+				fmt.Printf("Le joueur %s a gagné!\n", gameState.CurrentPlayer)
+				gameState.CurrentPlayer = "Gagnant: " + gameState.CurrentPlayer
+				gameState.GameOver = true
+				gameState.Winner = gameState.CurrentPlayer
+
+				tmpl, err := template.ParseFiles("victory.html")
+				if err != nil {
+					http.Error(w, "Template introuvable", http.StatusInternalServerError)
+				}
+				tmpl.Execute(w, gameState)
+				return
+			} else {
+				gameState.CurrentPlayer = switchPlayer(gameState.CurrentPlayer)
+			}
 		}
 	}
 
@@ -104,4 +149,11 @@ func handleAction(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Erreur lors du rendu du template", http.StatusInternalServerError)
 		fmt.Println("Execution error:", err)
 	}
+}
+
+func handleRematch(w http.ResponseWriter, r *http.Request) {
+	gameState.Board = Creation()
+	gameState.CurrentPlayer = "Rouge"
+	gameState.GameOver = false
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
