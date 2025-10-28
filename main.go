@@ -92,16 +92,22 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 	http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("img"))))
 
-	http.HandleFunc("/", handleAbout)
+	http.HandleFunc("/", handleMenu)
+	http.HandleFunc("/about", handleAbout)
 	http.HandleFunc("/action", handleAction)
 
-	fmt.Println("Serveur démarré sur http://localhost:8082/")
-	http.ListenAndServe(":8082", nil)
+	fmt.Println("Serveur démarré sur http://localhost:8084/")
+	http.ListenAndServe(":8084", nil)
 
 }
 
+func handleMenu(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.ParseFiles("victoire.html"))
+	tmpl.Execute(w, nil)
+}
+
 func handleAbout(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("about.html"))
+	tmpl := template.Must(template.ParseFiles("About.html"))
 	tmpl.Execute(w, gameState)
 }
 
@@ -177,11 +183,4 @@ func handleAction(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Erreur lors du rendu du template", http.StatusInternalServerError)
 		fmt.Println("Execution error:", err)
 	}
-}
-
-func handleRematch(w http.ResponseWriter, r *http.Request) {
-	gameState.Board = Creation()
-	gameState.CurrentPlayer = "Pizza"
-	gameState.GameOver = false
-	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

@@ -1,15 +1,50 @@
-body{
-    font-family: Arial, sans-serif;
-    text-align: center; 
-    margin-top: 50px; 
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-h1 {
-    color: darkred;
+.menu-container {
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
 }
 
-button{
-    padding: 10px 20px; 
-    font-size: 16px;
-    margin-top: 20px;
+.menu-container h1 {
+  font-size: 3em;
+  margin-bottom: 30px;
+  letter-spacing: 2px;
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.btn {
+  text-decoration: none;
+  background-color: #ffcc00;
+  color: #333;
+  padding: 15px 30px;
+  border-radius: 8px;
+  font-size: 1.2em;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #ffd633;
+}
+
+footer {
+  margin-top: 30px;
+  font-size: 0.9em;
+  opacity: 0.8;
 }

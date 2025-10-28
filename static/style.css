@@ -76,9 +76,9 @@ td {
 }
 
 .res {
-  width: 100px;
+  width: 200px;
   cursor: pointer;
   border: #fff;
   background-color: #f0f0f0;
-  font-size: 25px;
+  font-size: 15px;
 }
