@@ -137,7 +137,8 @@ func handleAction(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if gameState.GameOver {
-			http.Redirect(w, r, "/", http.StatusSeeOther)
+			tmpl, _ := template.ParseFiles("about.html")
+			tmpl.Execute(w, gameState)
 			return
 		}
 		colStr := r.FormValue("column")
@@ -149,16 +150,8 @@ func handleAction(w http.ResponseWriter, r *http.Request) {
 		if ligne, ok := deposerJeton(gameState.Board, col, gameState.CurrentPlayer); ok {
 			if gameState.Tour == NBLignes*NBColonnes+1 && !checkWin(gameState.Board, ligne, col, gameState.CurrentPlayer) {
 				fmt.Println("Match nul!")
-				gameState.CurrentPlayer = "MATCH NUL"
 				gameState.GameOver = true
-				gameState.Winner = gameState.CurrentPlayer
-
-				tmpl, err := template.ParseFiles("victory.html")
-				if err != nil {
-					http.Error(w, "Template introuvable", http.StatusInternalServerError)
-				}
-				tmpl.Execute(w, gameState)
-				return
+				gameState.Winner = "MATCH NUL"
 			}
 			if checkWin(gameState.Board, ligne, col, gameState.CurrentPlayer) {
 				fmt.Printf("Le joueur %s a gagné!\n", gameState.CurrentPlayer)

@@ -8,7 +8,11 @@
 </head>
 <body>
   <h1><img src="../img/puissance.jpg"></img></h1>
-  <h2>{{.CurrentPlayer}}, Tour {{.Tour}}</h2>
+  {{if .GameOver}}
+    <h2>{{.Winner}}</h2>
+  {{else}}
+    <h2>{{.CurrentPlayer}}, Tour {{.Tour}}</h2>
+  {{end}}
   <form action="/action" method="POST">
     <table>
       <thead>
