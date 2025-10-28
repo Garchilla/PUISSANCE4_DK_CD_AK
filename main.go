@@ -93,12 +93,18 @@ func main() {
 	http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("img"))))
 
 	http.HandleFunc("/", handleMenu)
+	http.HandleFunc("/instructions", handleInstructions)
 	http.HandleFunc("/about", handleAbout)
 	http.HandleFunc("/action", handleAction)
 
-	fmt.Println("Serveur démarré sur http://localhost:8084/")
-	http.ListenAndServe(":8084", nil)
+	fmt.Println("Serveur démarré sur http://localhost:8086/")
+	http.ListenAndServe(":8086", nil)
 
+}
+
+func handleInstructions(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.ParseFiles("instructions.html"))
+	tmpl.Execute(w, nil)
 }
 
 func handleMenu(w http.ResponseWriter, r *http.Request) {
@@ -120,20 +126,20 @@ func handleAction(w http.ResponseWriter, r *http.Request) {
 	mu.Lock()
 	defer mu.Unlock()
 
-	if r.FormValue("Reset") == "true" {
-		gameState.Board = Creation()
-		gameState.CurrentPlayer = "Pizza"
-		gameState.Tour = 1
-		gameState.GameOver = false
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		return
-	}
-
-	if gameState.GameOver {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		return
-	}
 	if r.Method == http.MethodPost {
+		action := r.FormValue("action")
+		if action == "reset" {
+			gameState.Board = Creation()
+			gameState.CurrentPlayer = "Pizza"
+			gameState.Tour = 1
+			gameState.GameOver = false
+			http.Redirect(w, r, "/about", http.StatusSeeOther)
+			return
+		}
+		if gameState.GameOver {
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+			return
+		}
 		colStr := r.FormValue("column")
 		col, err := strconv.Atoi(colStr)
 		if err != nil || col < 0 || col >= NBColonnes {
@@ -160,12 +166,6 @@ func handleAction(w http.ResponseWriter, r *http.Request) {
 				gameState.GameOver = true
 				gameState.Winner = gameState.CurrentPlayer
 
-				tmpl, err := template.ParseFiles("victory.html")
-				if err != nil {
-					http.Error(w, "Template introuvable", http.StatusInternalServerError)
-				}
-				tmpl.Execute(w, gameState)
-				return
 			} else {
 				gameState.CurrentPlayer = switchPlayer(gameState.CurrentPlayer)
 			}

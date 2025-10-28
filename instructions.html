@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pizza vs Burger — Guide officiel des règles</title>
+    <meta name="description"
+        content="Règles complètes de la version Pizza vs Burger du Puissance 4 : objectif, mise en place, déroulé du jeu et conseils." />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0f1220;
+            --card: #151834;
+            --accent: #ff914d;
+            /* Pizza */
+            --accent-2: #ffcf4a;
+            /* Burger */
+            --text: #e8ecf8;
+            --muted: #b6c0d6;
+            --border: #24294b;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            --radius: 14px;
+            --radius-sm: 10px;
+            --maxw: 980px;
+        }
+
+        body {
+            background: radial-gradient(1100px 500px at 20% -10%, #1a1f3d 0%, var(--bg) 60%), var(--bg);
+            color: var(--text);
+            font-family: "Inter", sans-serif;
+            line-height: 1.6;
+        }
+
+        .page {
+            max-width: var(--maxw);
+            margin: 40px auto 80px;
+            padding: 0 22px;
+        }
+
+        header {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 20px;
+            align-items: end;
+            margin-bottom: 28px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ff914d, #ffcf4a);
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            font-size: clamp(30px, 5vw, 42px);
+            margin: 0;
+        }
+
+        .subtitle {
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .badge {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: rgba(255, 207, 74, 0.08);
+            color: var(--accent-2);
+            font-weight: 600;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .card:not(.hero) {
+            padding: 22px;
+        }
+
+        .hero-header {
+            padding: 22px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .section-title .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        }
+
+        .kpis {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .kpi {
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.03);
+            text-align: center;
+        }
+
+        .kpi .value {
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .kpi .label {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .list-item {
+            display: grid;
+            grid-template-columns: 20px 1fr;
+            gap: 12px;
+        }
+
+        .bullet {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ff914d;
+            box-shadow: 0 0 0 4px rgba(255, 145, 77, 0.2);
+        }
+
+        .callout {
+            margin-top: 18px;
+            padding: 16px;
+            border: 1px dashed #ffcf4a;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 207, 74, 0.08);
+        }
+        
+            .tips {
+                display: grid;
+                gap: 12px;
+                margin-top: 18px;
+            }
+
+            .tip {
+                padding: 14px;
+                border-radius: var(--radius-sm);
+                background: rgba(255, 145, 77, 0.08);
+                border: 1px solid rgba(255, 145, 77, 0.3);
+            }
+
+            .return-btn {
+                display: inline-block;
+                margin-top: 20px;
+                padding: 12px 20px;
+                background: linear-gradient(135deg, var(--accent), var(--accent-2));
+                color: #fff;
+                font-weight: 600;
+                border-radius: var(--radius-sm);
+                text-decoration: none;
+                box-shadow: var(--shadow);
+                transition: transform 0.2s ease;
+            }
+
+            .return-btn:hover {
+                transform: scale(1.05);
+            }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <header>
+            <div class="brand">
+                <div class="logo"></div>
+                <div>
+                    <h1>Puissance 4</h1>
+                    <p class="subtitle">Guide des règles et conseils stratégiques</p>
+                </div>
+            </div>
+            <div>
+                <span class="badge">⏱️ 10–20 min • 👥 2 joueurs • 🎯 7+ ans</span>
+            </div>
+        </header>
+
+        <div class="grid">
+            <!-- Colonne gauche : Résumé -->
+            <section class="card hero">
+                <div class="hero-header">
+                    <h2 class="section-title"><span class="dot"></span>Résumé du jeu</h2>
+                    <p>
+                        Dans cette version gourmande du Puissance 4, les joueurs incarnent soit l’équipe Pizza 🍕 soit
+                        l’équipe Burger 🍔.
+                        À tour de rôle, ils laissent tomber leur symbole dans une colonne de la grille.
+                        Le premier à aligner quatre symboles identiques remporte la partie.
+                    </p>
+                </div>
+                <div style="padding:22px">
+                    <div class="kpis">
+                        <div class="kpi">
+                            <div class="value">6 × 7</div>
+                            <div class="label">Taille de la grille</div>
+                        </div>
+                        <div class="kpi">
+                            <div class="value">🍕 / 🍔</div>
+                            <div class="label">Équipes</div>
+                        </div>
+                        <div class="kpi">
+                            <div class="value">4 alignés</div>
+                            <div class="label">Condition de victoire</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Conseils stratégiques -->
+                <h2 class="section-title" style="margin-top:22px;">
+                    <span class="dot"></span>Conseils stratégiques
+                </h2>
+                <div class="tips">
+                    <div class="tip">
+                        <p><strong>Contrôlez le centre :</strong> les colonnes centrales offrent plus d’opportunités
+                            d’alignements.</p>
+                    </div>
+                    <div class="tip">
+                        <p><strong>Créez des menaces doubles :</strong> forcez l’adversaire à bloquer un alignement pour
+                            en ouvrir un autre.</p>
+                    </div>
+                    <div class="tip">
+                        <p><strong>Anticipez les diagonales :</strong> pensez à 2–3 coups d’avance pour préparer vos
+                            alignements.</p>
+                    </div>
+                    <div class="tip">
+                        <p><strong>Évitez les coups perdants :</strong> ne placez pas un pion qui donnerait la victoire
+                            immédiate à l’adversaire.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Colonne droite : Règles -->
+            <section class="card">
+                <h2 class="section-title" style="margin-top:22px;"><span class="dot"></span>Déroulé du tour</h2>
+                <div class="list">
+                    <div class="list-item"><span class="bullet"></span>
+                        <p><strong>Tour par tour :</strong> Pizza et Burger alternent et jouent un seul pion par tour.
+                        </p>
+                    </div>
+                    <div class="list-item"><span class="bullet"></span>
+                        <p><strong>Placement :</strong> choisissez une colonne ; la part ou le burger tombe et occupe la
+                            case libre la plus basse.</p>
+                    </div>
+                    <div class="list-item"><span class="bullet"></span>
+                        <p><strong>Validité :</strong> un coup est valide uniquement si la colonne n’est pas pleine.</p>
+                    </div>
+                    <div class="list-item"><span class="bullet"></span>
+                        <p><strong>Vérification :</strong> après chaque coup, vérifiez si un alignement de quatre pizzas
+                            ou quatre burgers est formé.</p>
+                    </div>
+                </div>
+                <div class="callout">
+                    <p><strong>Fin de partie :</strong> victoire dès qu’un joueur aligne 4 symboles identiques.
+                        Si toutes les colonnes sont pleines sans alignement, la partie est déclarée nulle.</p>
+                </div>
+                <a href="/" class="return-btn">⬅ Retour au menu principal</a>
+            </section>
+        </div>
+    </div>
+</body>
+
+</html>
