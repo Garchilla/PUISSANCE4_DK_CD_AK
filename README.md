@@ -7,5 +7,5 @@ Lancer le jeu:
     
 Descriptions:
 
-    - En lancant le jeu il y a un bouton instruction que l'on peut cliquer dessus pour voir en détails les du jeu
-    - Pour un petit résumé c'est en jeu Puissance 4 fait à partir de golang et html/css et fait dans le thème de "pizza vs burger"
+    - En lancant le jeu il y a un bouton instruction pour voir en détails les règles du jeu.
+    - Pour un petit résumé c'est en jeu Puissance 4 fait à partir de golang, html/css et fait dans le thème de "pizza vs burger"
